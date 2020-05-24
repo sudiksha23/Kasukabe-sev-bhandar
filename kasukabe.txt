@@ -1,0 +1,228 @@
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+#include<stdlib.h> 
+#include <ctype.h>
+//#include <sys/stat.h>
+#include<stdlib.h>
+struct item
+{
+int price;
+int stock;
+char item_name[20];
+}it[20];
+int main()
+{
+int quantity,sum_prices,checkout=1,i,after_read,stock_left;
+long int passwor;
+for(i=0;i<9;i++)
+it[i].price=160;
+it[9].price=200;
+it[10].price=200;
+for(i=11;i<=15;i++)
+it[i].price=210;
+for(i=16;i<=19;i++)
+it[i].price=180;
+strcpy(it[0].item_name,"Ratlami sev");
+strcpy(it[1].item_name,"Long sev");
+strcpy(it[2].item_name,"Lehsun sev");
+strcpy(it[3].item_name,"Fheeki sev");
+strcpy(it[4].item_name,"Tomato sev");
+strcpy(it[5].item_name,"Palak sev");
+strcpy(it[6].item_name,"Spicy Mixture");
+strcpy(it[7].item_name,"Sweet Mixture");
+strcpy(it[8].item_name,"Fariyali Mixture");
+strcpy(it[9].item_name,"Potato Chips");
+strcpy(it[10].item_name,"Banana Chips");
+strcpy(it[11].item_name,"Mathri");
+strcpy(it[12].item_name,"Khurme");
+strcpy(it[13].item_name,"Chakli");
+strcpy(it[14].item_name,"Samosa");
+strcpy(it[15].item_name,"Bhakarwadi");
+strcpy(it[16].item_name,"Chana Daal");
+strcpy(it[17].item_name,"Moong Daal");
+strcpy(it[18].item_name,"Kaabli Chana");
+strcpy(it[19].item_name,"Tasty Daane");
+for(i=0;i<20;i++)
+it[i].stock=100;
+printf("\t\t\t\t***KASUKABE SEV BHANDAAR*** \n");
+printf("\t\t\t_____________________________________________________________________________________________________________________________\n");
+for(i=0;i<20;i++)
+printf("\t\t\t\t* %s\n",it[i].item_name);
+printf("\t\t\t_____________________________________________________________________________________________________________________________\n");
+printf("\t\t\t_____________________________________________________________________________________________________________________________\n");
+char item[20],temp[20],customer_name[20];
+FILE *fp;
+sum_prices=0;
+while(checkout==1)
+{
+printf("\t\t\t\t\n\t\t\t\tEnter your choice\n \n\t\t\t\t**A. Buy Product\n\t\t\t\t**B. End\n\t\t\t\t**C. RESET\n");
+char ch,ch1;
+scanf("%c",&ch);
+printf("\t\t\t_____________________________________________________________________________________________________________________________\n");
+switch (ch)
+{
+case 'A' :   scanf("%c",&ch1);
+             printf("Enter Item Name\n");
+             scanf("%[^\n]s",item); 
+            printf("\n");
+             int flag=0;
+             for(i=0;i<20;i++)
+                {
+                   if(!strcmp(it[i].item_name,item))
+                      {
+                          printf("PRICE = %d\n",it[i].price);
+                          printf("Enter quantity of product required in kgs = ");
+                          scanf("%d",&quantity);
+                          sum_prices=sum_prices+(it[i].price*quantity);
+                          printf("\nCurrent bill till now = %d\n",sum_prices);                    
+			fp=fopen(it[i].item_name,"r");
+			fscanf(fp,"%d",&after_read); 
+                        fclose(fp);
+                      stock_left=after_read-quantity;
+			fp=fopen(it[i].item_name,"w");
+                     fprintf(fp,"%d",stock_left);
+			fclose(fp);
+                          flag=1;
+                          scanf("%c",&ch1);
+                          break;
+                     }                                                         
+               }
+             if(!flag)
+               {
+                    printf("Item Not found\nTRY AGAIN !!!\n");
+                    scanf("%c",&ch1);
+               }
+            break;  
+case 'B' :        scanf("%c",&ch1);
+         	 printf("Enter customer name = ");
+ 		 scanf("%[^\n]s",customer_name); 
+                printf("\n");
+		if (fp = fopen(customer_name, "r"))
+        	fclose(fp);
+		else
+		{	
+		fp=fopen(customer_name,"w");
+		fputs(customer_name, fp);
+		 fputs("\n", fp) ; 
+		fputs("0",fp);
+		 fclose(fp) ; 
+		}
+		int due[10]={0},x=0,num=0;
+		char c;
+		fp=fopen(customer_name,"r"); 
+                  while(1)
+ 		    {
+    			    c = fgetc(fp);
+    			   if(isdigit(c)!=0)
+			{due[x]=c-'0';
+			x++;
+			}
+				else if(c==EOF)
+    			        break;
+    			    else
+    			        continue;
+    		 }
+                        int r=0;
+			for(int w=x-1;w>=0;w--)
+			{ num=num+pow(10,w)*due[r];
+ 			  r++;
+                        }
+                         int total_amount=num+sum_prices;
+			printf("**Previous Dues = %d\n",num);
+			printf("**Current Bill = %d\n",sum_prices);
+			printf("**Current bill including previous dues = %d\n",total_amount);
+    			 fclose(fp);
+		char yn;
+                scanf("%c",&ch1);
+		printf("Do you want to pay right now? Enter Y or N = ");
+		scanf("%c",&yn);
+		if((yn=='Y')||(yn=='y'))
+		{
+		fp=fopen(customer_name,"w");   
+	        fputs("0", fp);
+		fclose(fp);
+		printf("Bill paid :) HAPPY SHOPPING \n\n");
+		}
+               else
+		{
+		 fp=fopen(customer_name,"w");   
+		   fputs(customer_name, fp);
+		 fputs("\n", fp) ; 
+		//fputs(&total_amount,fp1);
+                 // fwrite(&total_amount,sizeof(int),1,fp);
+		fprintf(fp,"%d",total_amount);
+		 fclose(fp);
+		   printf("Dues saved in file. You can pay later. :)\n");
+		}
+       		  checkout=0;
+        	 break;
+case 'C':    passwor=123;
+             printf("Enter Pin number  ");
+             long int userpassword;
+             scanf("%ld",&userpassword);
+             int flag1=0;
+             if(userpassword==passwor)
+                 {
+                     int ch2;
+                     flag1=1;
+                     printf("ENTER YOUR CHOICE\n1-Checking stock\n2-Revive Stock\n3-EXIT\n4-Viewing Pictorial Respresentation of stock\n");
+                     scanf("%d",&ch2);
+                     if(ch2==1)
+                        {  
+                              printf("Stock Left At the end of the day\n\n");
+                              for(int k=0;k<20;k++)    
+                            {         
+			fp=fopen(it[k].item_name,"r");
+			fscanf(fp,"%d",&after_read); 
+			 printf("%s - %d\n",it[k].item_name,after_read);
+                        fclose(fp);
+                            } 
+                        }
+                     else if(ch2==2)
+                          {      
+                             for(int k=0;k<20;k++)        
+                             {
+				fp=fopen(it[k].item_name,"w");
+                              fputs("100",fp);
+				fclose(fp);			
+		       	}
+                             printf("Stock Revived\n\n");
+                          }
+                     else if(ch2==3)
+                             checkout=0;
+                      else if(ch2==4)
+                          {
+                               int temp[20];
+                               printf("                    ");
+                               for(int u=1;u<=10;u++)
+                               printf("%d   ",u);
+                                printf("\n");
+                               for(int u=0;u<20;u++)
+                                   {   int len=strlen(it[u].item_name);
+                                      printf("%s",it[u].item_name);
+                                      for(int w=len;w<=18;w++)
+                                       printf(" ");					
+					fp=fopen(it[u].item_name,"r");
+					fscanf(fp,"%d",&after_read); 
+                      			  fclose(fp);
+                                      temp[u]=after_read;
+                                      temp[u]=temp[u]/10;
+                                      for(int w=0;w<temp[u];w++)
+                                             {
+                                                  printf("*** ");
+                                             }
+                                       printf("\n");
+                                    }
+                            }
+                }
+             if(flag1==0)
+                  {
+                         printf("Wrong PIN number\n TRY AGAIN :)\n");     
+                  } 
+           scanf("%c",&ch1);   
+           break;     
+}
+}
+return 0;
+}
